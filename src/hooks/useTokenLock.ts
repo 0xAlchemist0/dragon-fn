@@ -17,6 +17,7 @@ import { contracts } from "../../contract_interactions/contracts/contracts";
 import { LPTokenABI } from "../../config/LPTokenABI";
 
 export function useTokenLock(type: string) {
+  const [lockState, setLockState];
   const { wallets } = useWallets();
   const [lockTime, setLockTime] = useState(0);
   const [tokenAmount, setTokenAmount] = useState(0);
