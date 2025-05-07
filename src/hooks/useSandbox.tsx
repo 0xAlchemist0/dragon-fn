@@ -9,22 +9,9 @@ import {
 import useWalletInfo from "./useWalletInfo";
 import { calculateVotingPower } from "../../contract_interactions/contract-reads";
 import { assert } from "console";
-const initialState = {
-  lockTime: "1778116339",
-  tokenAmount: 3000,
-  votingPower: 0,
-  isReady: false,
-  approve: 0,
-  wasApproved: false,
-  txComplete: false,
-  poolSelected: null,
-  handleTXEvent: 0,
-  txMessage: null,
-  load: false,
-  type: "Extend",
-};
+const initialState = getInitialState();
 export function useSandBox() {
-  const { walletInfo }: any = useWalletInfo();
+  const { provider, account }: any = useWalletInfo();
   //dispatch updates lockstae is the state
   //has to always be state and reducer
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -41,7 +28,7 @@ export function useSandBox() {
 
   useEffect(() => {
     const { isReady } = state;
-    if (isReady && walletInfo) {
+    if (isReady && provider && account) {
       handleTxEvent();
     }
   }, [state.isReady]);
@@ -59,9 +46,10 @@ export function useSandBox() {
 
   function lockTimeHandler() {
     const { lockTime } = state;
-
-    const formattedTime = numericToUnix(lockTime);
-    dispatch({ type: "set", payload: { lockTime: formattedTime } });
+    console.log(state.lockTime);
+    // const formattedTime = numericToUnix(lockTime);
+    // console.log(formattedTime);
+    // dispatch({ type: "set", payload: { lockTime: formattedTime } });
   }
 
   async function votingPowerHandler() {
@@ -92,7 +80,6 @@ export function useSandBox() {
 
   async function lockLp() {
     const { tokenAmount, lockTime }: any = state;
-    const { provider, account } = walletInfo;
     console.assert(lockTime, {
       value: lockTime,
       message: "Value error",
@@ -112,8 +99,7 @@ export function useSandBox() {
   }
 
   async function increaseLock() {
-    const { lockTime, tokenAmount }: any = state;
-    const { provider, account } = walletInfo;
+    const { tokenAmount }: any = state;
     txTrigger();
 
     const txResult = await increaseLockAmount(tokenAmount, provider, account);
@@ -125,11 +111,9 @@ export function useSandBox() {
 
   async function extendTime() {
     const { lockTime } = state;
-    const { provider, account } = walletInfo;
-    console.assert(provider, { message: "null value" });
-    console.log(state);
+
     txTrigger();
-    const txResult = await extendLockTime(state.lockTime, provider, account[0]);
+    const txResult = await extendLockTime(lockTime, provider, account);
     dispatch({
       type: "set",
       payload: { txMessage: txResult, load: false, txComplete: true },
@@ -141,7 +125,7 @@ export function useSandBox() {
 
 function getInitialState() {
   return {
-    lockTime: 1778116339n,
+    lockTime: 1778116339,
     tokenAmount: 3000,
     votingPower: 0,
     isReady: false,

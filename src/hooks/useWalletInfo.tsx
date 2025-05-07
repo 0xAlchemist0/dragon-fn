@@ -3,22 +3,25 @@ import { useEffect, useState } from "react";
 
 function useWalletInfo() {
   const { wallets } = useWallets();
-  const [walletInfo, setWalletInfo] = useState({});
+  const [info, setInfo] = useState({
+    account: null,
+    provider: null,
+  });
+
   useEffect(() => {
     async function getInfo() {
-      const provider: any = (await wallets[0].getEthereumProvider()) || null;
-      const account =
-        (await provider.request({ method: "eth_requestAccounts" })[0]) || null;
-      setWalletInfo({
+      const provider: any = await wallets[0].getEthereumProvider();
+      const accountFound: any = wallets[0].address;
+      setInfo({
         provider,
-        account,
+        account: accountFound,
       });
     }
     if (wallets[0]) {
       getInfo();
     }
   }, [wallets]);
-  return { walletInfo };
+  return { account: info["account"], provider: info["provider"] };
 }
 
 export default useWalletInfo;
