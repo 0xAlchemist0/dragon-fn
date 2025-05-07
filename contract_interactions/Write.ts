@@ -52,10 +52,10 @@ class Write {
     return response;
   }
 
-  public async submitTransaction(contractCallParams: any) {
+  public async submitTransaction(args: any) {
     const { request }: any = await client.simulateContract({
       account: this.account,
-      ...contractCallParams,
+      ...args,
     });
     const txHash: any = await this.walletClient.writeContract(request);
     const resposne: any = this.txResponse(Boolean(txHash), txHash);
