@@ -1,14 +1,12 @@
-import { useWallets } from "@privy-io/react-auth";
-import { useEffect, useMemo, useReducer } from "react";
-import { numericToUnix } from "../time-helper/time-helper";
+import { useEffect, useReducer } from "react";
+import { calculateVotingPower } from "../../contract_interactions/contract-reads";
 import {
   createVeLock,
   extendLockTime,
   increaseLockAmount,
 } from "../../contract_interactions/contract-writes";
+import { numericToUnix } from "../time-helper/time-helper";
 import useWalletInfo from "./useWalletInfo";
-import { calculateVotingPower } from "../../contract_interactions/contract-reads";
-import { assert } from "console";
 const initialState = getInitialState();
 export function useSandBox() {
   const { provider, account }: any = useWalletInfo();
@@ -44,12 +42,11 @@ export function useSandBox() {
     }
   }
 
+  //handles the lock times when changed
   function lockTimeHandler() {
     const { lockTime } = state;
-    console.log(state.lockTime);
-    // const formattedTime = numericToUnix(lockTime);
-    // console.log(formattedTime);
-    // dispatch({ type: "set", payload: { lockTime: formattedTime } });
+    const formattedTime = numericToUnix(lockTime);
+    dispatch({ type: "set", payload: { lockTime: formattedTime } });
   }
 
   async function votingPowerHandler() {
