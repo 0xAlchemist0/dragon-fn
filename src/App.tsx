@@ -10,6 +10,7 @@ import Dashboard from "./pages/user-dashboard/Dashboard";
 import VoteMain from "./pages/voting/VoteMain";
 import TestLPLockMenu from "./pages/lock-swap/TestLPLockMenu";
 import { createTheme } from "@mui/material";
+import Sandbox from "./compnents/Sandbox.tsx";
 function App() {
   useEffect(() => {
     async function test() {
@@ -29,6 +30,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/vote" element={<VoteMain />} />
             <Route path="/lock" element={<TestLPLockMenu />} />
+            <Route path="/sb" element={<Sandbox />} />
           </Route>
         </Routes>
       </BrowserRouter>
