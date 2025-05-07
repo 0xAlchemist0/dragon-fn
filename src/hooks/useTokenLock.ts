@@ -46,11 +46,11 @@ export function useTokenLock(type: string) {
   }, [isReady]);
 
   useEffect(() => {
+    console.log("info");
     console.log(tokenAmount, lockTime);
+
     if (lockTime > 0 && tokenAmount > 0) {
       if (type == "lock") {
-        console.log(lockTime);
-
         getVotingPower();
       }
     }
@@ -74,6 +74,8 @@ export function useTokenLock(type: string) {
   async function lockLP() {
     const epoch = await getCurrentEpochInfo();
     const unix_time = numericToUnix(lockTime);
+
+    console.log("lock time: ", unix_time);
     const provider = await wallets[0]?.getEthereumProvider();
     const account = await provider.request({ method: "eth_requestAccounts" });
     setLoad(true);
@@ -136,6 +138,7 @@ export function useTokenLock(type: string) {
   async function extendTime() {
     const { provider, account }: any = await getProvider();
     const unlock_time = numericToUnix(lockTime);
+    console.log(`unlock time: ${unlock_time}, type: ${typeof unlock_time}`);
     setLoad(true);
     const extendResult: any = await extendLockTime(
       unlock_time,
