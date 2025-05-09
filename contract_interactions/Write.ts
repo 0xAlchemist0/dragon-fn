@@ -8,15 +8,15 @@ import { contracts } from "./contracts/contracts";
 //dont want to save provider wont use it here only when initializeing
 class Write {
   public walletClient: any = null;
-  public account: any = null;
+  public _wallet: any = null;
   public constructor(provider: any, account: any) {
-    this.account = account;
+    this._wallet = account;
     this.initializeWalletClient(provider);
   }
 
   public async initializeWalletClient(provider: any) {
     this.walletClient = createWalletClient({
-      account: this.account,
+      account: this._wallet,
       chain: sonic,
       transport: custom(provider),
     });
@@ -54,7 +54,7 @@ class Write {
 
   public async submitTransaction(args: any) {
     const { request }: any = await client.simulateContract({
-      account: this.account,
+      account: this._wallet,
       ...args,
     });
     const txHash: any = await this.walletClient.writeContract(request);
