@@ -23,11 +23,17 @@ class Read {
   }
 
   public async getPartners() {
-    const partners = [];
+    const _partners = [];
     if (this._totalPartners) {
       for (let i = 1; i <= this._totalPartners; i++) {
-        const current_partner: Array<any> | void = await this.getPartner(i);
-        const feesEarned  = 
+        const _partner: any = await this.getPartner(i);
+        const _feesEarned = await this.getEpochRewards();
+        const _probability_boost = await this.getPartnerProbabilityBoost(
+          i.toString()
+        );
+        const 
+        _partner.push(_feesEarned);
+        
       }
     }
   }
@@ -85,7 +91,7 @@ class Read {
     return _epochRewards;
   }
 
-  public async getPartnerProbabilityBoost(_partnerId: number) {
+  public async getPartnerProbabilityBoost(_partnerId: string) {
     const _probabilityBoost = await this.perfromRead({
       address: contracts.ve69LPPoolVoting,
       abi: ve69LPPoolVotingABI,
