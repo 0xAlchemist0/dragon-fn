@@ -19,6 +19,7 @@ export function useSandBox() {
   useEffect(() => {
     const { lockTime, tokenAmount } = state;
     if (lockTime > 0 && tokenAmount > 0) {
+      lockTimeHandler();
       console.log(`Lock Time: ${lockTime} \n Amount: ${tokenAmount}`);
       votingPowerHandler();
     } else if (lockTime > 0) {
@@ -35,7 +36,9 @@ export function useSandBox() {
 
   useEffect(() => {
     const { isReady } = state;
+    console.log(isReady);
     if (isReady && provider && account) {
+      console.log("READY!");
       handleTxEvent();
     }
   }, [state.isReady]);
@@ -57,6 +60,7 @@ export function useSandBox() {
   //handles the lock times when changed
   function lockTimeHandler() {
     const { lockTime } = state;
+    300044;
     const formattedTime = numericToUnix(lockTime);
     dispatch({ type: "set", payload: { lockTime: formattedTime } });
   }
