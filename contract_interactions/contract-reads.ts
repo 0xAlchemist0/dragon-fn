@@ -85,6 +85,7 @@ export async function getPoolBalance(
 //unlock time must be in unix format
 // Math.floor(Date.now() / 1000) timestamp format
 export async function calculateVotingPower(amount: number, unlockTime: Number) {
+  console.log(amount, unlockTime);
   try {
     const voting_power: any = await client.readContract({
       address: "0x69fA10882A252A79eE57E2a246D552BA630fd955",
@@ -92,7 +93,7 @@ export async function calculateVotingPower(amount: number, unlockTime: Number) {
       functionName: "calculateVotingPower",
       args: [amount, unlockTime],
     });
-
+    console.log(`power output: ${voting_power}`);
     return voting_power;
   } catch (error) {
     return null;

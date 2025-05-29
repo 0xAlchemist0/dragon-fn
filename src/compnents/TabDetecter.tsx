@@ -1,8 +1,7 @@
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaTruckLoading, FaWallet } from "react-icons/fa";
+import { FaWallet } from "react-icons/fa";
 import { LuWaves } from "react-icons/lu";
 function TabDetector({ type, balances }: any) {
-  console.log(balances);
   function DetectElement({ type, balances }: any) {
     switch (type) {
       case "tokens":
@@ -110,7 +109,6 @@ function TabDetector({ type, balances }: any) {
     );
   }
   function Votes({ balances }: any) {
-    console.log(balances.votes);
     return (
       <>
         {balances.votes ? (
@@ -119,7 +117,6 @@ function TabDetector({ type, balances }: any) {
             style={{ animation: "var(--fadein)" }}
           >
             {balances.votes.map((vote: any, key: any) => {
-              console.log(vote);
               return (
                 <span key={key} className="">
                   <DrawerItem

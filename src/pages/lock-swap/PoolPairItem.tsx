@@ -1,15 +1,21 @@
-import { Avatar, Badge } from "@mui/material";
-import React from "react";
+import { useContext } from "react";
+import { LockContext } from "../../context-providers/LockProvider";
 
-function PoolPairItem({ pool, setPoolSelected }: any) {
+function PoolPairItem({ pool, handleClose }: any) {
   const { name, symbol, address, logo1, logo2 } = pool;
+  const { dispatch }: any = useContext(LockContext);
+
+  const handleSelection = () => {
+    console.log(pool);
+    dispatch({ type: "set", payload: { poolSelected: pool } });
+    handleClose();
+  };
+
   return (
     <div className="">
       <button
-        className=" w-full flex gap-2 whitespace-nowrapb border-0  bg-[#2A2B30] hover:bg-[#38383f]"
-        onClick={() => {
-          setPoolSelected(pool);
-        }}
+        className=" w-full flex gap-2 whitespace-nowrap border-0 rounded-lg p-2  bg-[#2A2B30] hover:bg-[#38383f]"
+        onClick={handleSelection}
       >
         <div className="relative size-9">
           {/* Main image or content */}

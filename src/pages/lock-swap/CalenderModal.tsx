@@ -1,14 +1,10 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-
+import * as React from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 
-import dayjs, { Dayjs } from "dayjs";
 import Modal from "@mui/material/Modal";
 import { FaRegCalendar } from "react-icons/fa";
-import { DateRangeCalendar } from "@mui/x-date-pickers-pro/DateRangeCalendar";
-import { DateRange } from "@mui/x-date-pickers-pro/models";
 const style = {
   position: "absolute",
   top: "50%",
@@ -25,6 +21,7 @@ const style = {
 };
 
 export default function CalenderModal() {
+  // const { dispatch }: any = useContext(LockContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

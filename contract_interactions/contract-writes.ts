@@ -1,9 +1,9 @@
-import { client } from "../config/viem_config.ts";
 import { createWalletClient, custom, GetBlockNumberErrorType } from "viem";
 import { sonic } from "viem/chains";
 import { ve69_ABI } from "../config/ve69-ABI";
-import { contracts } from "./contracts/contracts.ts";
 import { ve69LPPoolVotingABI } from "../config/ve69LPPoolVotingABI.ts";
+import { client } from "../config/viem_config.ts";
+import { contracts } from "./contracts/contracts.ts";
 const MAX_ALLOWANCE = 1000000;
 
 export async function createVeLock(
@@ -14,7 +14,6 @@ export async function createVeLock(
 ) {
   try {
     const walletClient = await initializeWalletClient(provider, account);
-    console.log(contracts.ve69LP);
     const { request }: any = await client.simulateContract({
       account,
       address: contracts.ve69LP,
@@ -53,14 +52,12 @@ export async function increaseLockAmount(
       args: [value],
     });
     const txHash = await walletClient.writeContract(request);
-    console.log(`TxHash: ${txHash}`);
     return {
       complete: true,
       message: `🎉 Transaction Success`,
       txHash,
     };
   } catch (error) {
-    console.log(error);
     const message = error as GetBlockNumberErrorType;
     return {
       complete: false,
@@ -74,7 +71,6 @@ export async function extendLockTime(
   provider: any,
   account: any
 ) {
-  console.log(account);
   try {
     const walletClient = await initializeWalletClient(provider, account);
     const { request }: any = await client.simulateContract({
@@ -91,7 +87,6 @@ export async function extendLockTime(
       txHash,
     };
   } catch (error) {
-    console.log(error);
     const message = error as GetBlockNumberErrorType;
     return {
       complete: false,
@@ -121,7 +116,6 @@ export async function vote(_partnerId: any, provider: any, account: any) {
       txHash,
     };
   } catch (error) {
-    console.log(error);
     const message = error as GetBlockNumberErrorType;
     return {
       complete: false,
@@ -154,7 +148,6 @@ export async function approveSending(
 
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 }

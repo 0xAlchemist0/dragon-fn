@@ -1,4 +1,5 @@
-export function numericToUnix(days_added: number) {
+export function numericToUnix(days_added: any) {
+  console.log(typeof days_added, days_added);
   const current_date: any = new Date();
   const result = addDays(current_date, days_added);
   console.log(result);

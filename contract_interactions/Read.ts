@@ -8,43 +8,63 @@ import { ve69LPPoolVotingABI } from "../config/ve69LPPoolVotingABI.ts";
 import { client } from "../config/viem_config";
 import { contracts } from "./contracts/contracts";
 
-class Read {
-  public _wallet: Address | null = null;
+export class Read {
+  public _wallet: string | null = null;
   public _lockAmount: number | null = 0;
   public _unlockTime: number | null = 0;
   public isApproved: boolean = false;
   public _epoch: Array<any> | null = null;
   public _period: number | null = null;
-  public partners: Array<any> | null = [];
+  public _partners: any[] = [];
   public _totalPartners: number | null = null;
 
-  public constructor(_wallet: Address) {
+  //we need to get period partners epoch and total partners
+  public constructor(_wallet: string) {
     this._wallet = _wallet || null;
+    this.getCurrentEpochInfo();
+    this.getNextPartnerId();
+    this.currentPeriod();
   }
 
   public async getPartners() {
-    const _partners = [];
     if (this._totalPartners) {
       for (let i = 1; i <= this._totalPartners; i++) {
-        const _partner: any = await this.getPartner(i);
-        const _feesEarned = await this.getEpochRewards();
-        const _probability_boost = await this.getPartnerProbabilityBoost(
-          i.toString()
-        );
-        const 
-        _partner.push(_feesEarned);
-        
+        const _partnerId: string = i.toString();
+        const _partner: any | null = await this.getPartner(_partnerId);
+        if (_partner) {
+          const _feesEarned: any = await this.getEpochRewards();
+          const _probability_boost: any = await this.getPartnerProbabilityBoost(
+            _partnerId
+          );
+          const _partner_votes: any = await this.getPartnerVotes(_partnerId);
+          _partner.push(_feesEarned);
+          _partner.push(_probability_boost);
+          _partner.push(_partnerId);
+          _partner.push(_partner_votes);
+        }
+        this._partners.push(_partner);
       }
     }
   }
 
-  public async getPartner(_partnerId: number) {
+  public async getPartnerVotes(_partnerId: string) {
+    const votes = await this.perfromRead({
+      address: contracts.ve69LPPoolVoting,
+      abi: ve69LPPoolVotingABI,
+      functionName: "partnerVotes",
+      args: [this._period, _partnerId],
+    });
+    return votes;
+  }
+
+  public async getPartner(_partnerId: string) {
     const _partnerInfo = await this.perfromRead({
       address: contracts.DragonPartnerRegistry,
       abi: DragonPartnerRegistryABI,
       functionName: "getPartner",
       args: [_partnerId],
     });
+    return _partnerInfo;
   }
 
   public async getNextPartnerId() {
@@ -54,6 +74,7 @@ class Read {
       functionName: "nextPartnerId",
       args: [],
     });
+    console.log(_next_partner);
 
     this._totalPartners = _next_partner ? _next_partner[0] - 1 : null;
 

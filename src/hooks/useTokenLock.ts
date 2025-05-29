@@ -1,20 +1,20 @@
-import { useEffect, useState } from "react";
 import { useWallets } from "@privy-io/react-auth"; // adjust if different
+import { useEffect, useState } from "react";
 
-import { numericToUnix } from "../time-helper/time-helper";
+import { LPTokenABI } from "../../config/LPTokenABI";
 import {
   calculateVotingPower,
   getCurrentEpochInfo,
+  verifyApproval,
 } from "../../contract_interactions/contract-reads";
 import {
+  approveSending,
   createVeLock,
   extendLockTime,
   increaseLockAmount,
 } from "../../contract_interactions/contract-writes.ts";
-import { verifyApproval } from "../../contract_interactions/contract-reads";
-import { approveSending } from "../../contract_interactions/contract-writes.ts";
 import { contracts } from "../../contract_interactions/contracts/contracts";
-import { LPTokenABI } from "../../config/LPTokenABI";
+import { numericToUnix } from "../time-helper/time-helper";
 
 export function useTokenLock(type: string) {
   const { wallets } = useWallets();
@@ -46,9 +46,6 @@ export function useTokenLock(type: string) {
   }, [isReady]);
 
   useEffect(() => {
-    console.log("info");
-    console.log(tokenAmount, lockTime);
-
     if (lockTime > 0 && tokenAmount > 0) {
       if (type == "lock") {
         getVotingPower();
@@ -74,8 +71,6 @@ export function useTokenLock(type: string) {
   async function lockLP() {
     const epoch = await getCurrentEpochInfo();
     const unix_time = numericToUnix(lockTime);
-
-    console.log("lock time: ", unix_time);
     const provider = await wallets[0]?.getEthereumProvider();
     const account = await provider.request({ method: "eth_requestAccounts" });
     setLoad(true);
@@ -138,7 +133,6 @@ export function useTokenLock(type: string) {
   async function extendTime() {
     const { provider, account }: any = await getProvider();
     const unlock_time = numericToUnix(lockTime);
-    console.log(`unlock time: ${unlock_time}, type: ${typeof unlock_time}`);
     setLoad(true);
     const extendResult: any = await extendLockTime(
       unlock_time,
@@ -154,7 +148,6 @@ export function useTokenLock(type: string) {
   async function getVotingPower() {
     const unix_time = numericToUnix(lockTime);
     const power = await calculateVotingPower(tokenAmount, unix_time);
-    console.log("power", power);
     setVotingPower(power);
   }
 

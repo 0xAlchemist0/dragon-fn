@@ -1,23 +1,27 @@
-import React from "react";
-import useWalletInfo from "../hooks/useWalletInfo";
-import { useSandBox } from "../hooks/useSandbox";
+import { useEffect } from "react";
+import useVotingNew from "../hooks/useVotingNew";
 
 function Sandbox() {
-  const { state, dispatch } = useSandBox();
+  const instance = useVotingNew();
+  // const { state, dispatch } = useSandBox();
+  // cons;
 
-  const handleTx = () => {
-    if (state.isReady) {
-      dispatch({ type: "set", payload: { isReady: false } });
-    } else {
-      dispatch({ type: "set", payload: { isReady: true } });
+  useEffect(() => {
+    if (instance) {
     }
-  };
+  }, [instance]);
+
+  // const handleTx = () => {
+  //   if (state.isReady) {
+  //     dispatch({ type: "set", payload: { isReady: false } });
+  //   } else {
+  //     dispatch({ type: "set", payload: { isReady: true } });
+  //   }
+  // };
 
   return (
     <div>
-      <button className="text-white" onClick={handleTx}>
-        hello
-      </button>
+      <button className="text-white">hello</button>
     </div>
   );
 }

@@ -10,7 +10,6 @@ function useScreenWidth() {
   }, []);
 
   useEffect(() => {
-    console.log(width);
     if (width > 635) {
       setPosition("right");
     } else {

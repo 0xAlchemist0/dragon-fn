@@ -1,5 +1,5 @@
+import { useWallets } from "@privy-io/react-auth";
 import { useEffect, useState } from "react";
-import { contracts } from "../../contract_interactions/contracts/contracts";
 import {
   currentPeriod,
   getDragonBalance,
@@ -10,11 +10,9 @@ import {
   getVotingPower,
   userVotes,
 } from "../../contract_interactions/contract-reads";
-import { useWallets } from "@privy-io/react-auth";
 import { unixToNumeric } from "../time-helper/time-helper";
-import { setBalance } from "viem/actions";
-import useVoting from "./useVoting";
 import useAuthentication from "./useAuthentication";
+import useVoting from "./useVoting";
 
 function useBalances() {
   const { wallets } = useWallets();
@@ -28,9 +26,7 @@ function useBalances() {
     }
   }, [wallets]);
 
-  useEffect(() => {
-    console.log(balances);
-  }, [balances]);
+  useEffect(() => {}, [balances]);
 
   async function findBalances() {
     try {
@@ -42,7 +38,6 @@ function useBalances() {
       const votingPower: any = await getVotingPower(address);
       const lockInfo: any = await getlock(address);
       const info = await getUserVoteInfo(period_info, wallets);
-      console.log(state);
       const tempDate: any = lockInfo[1];
       lockInfo[1] = unixToNumeric(tempDate);
       //lock amount index zero is lock amount , index 1 is lock time shows full date
@@ -87,7 +82,6 @@ function useBalances() {
       const votes = [];
       for (let i = 0; i < partners.length; i++) {
         const current: any = partners[i];
-        console.log(current);
         if (current) {
           const _partnerId = current[current.length - 2];
           const partner_info = await getPartner(_partnerId);

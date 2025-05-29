@@ -1,19 +1,27 @@
-import { Tab, Tabs } from "@mui/material";
-import React, { useState } from "react";
+import { useContext } from "react";
+import { LockContext } from "../../context-providers/LockProvider";
 import LockSwapModal from "./LockSwapModal";
 
 function LockSwapTabs() {
-  const [active, setActive] = useState("Lock");
+  const { state, dispatch }: any = useContext(LockContext);
+
+  const { type }: any = state;
 
   const handleLock = () => {
-    active == "lock" ? null : setActive("Lock");
+    type == "Lock"
+      ? null
+      : dispatch({ type: "set", payload: { type: "Lock" } });
   };
 
   const handleIncrease = () => {
-    active == "increase" ? null : setActive("Increase");
+    type == "Increase"
+      ? null
+      : dispatch({ type: "set", payload: { type: "Increase" } });
   };
   const handleExtend = () => {
-    active == "extend" ? null : setActive("Extend");
+    type == "Extend"
+      ? null
+      : dispatch({ type: "set", payload: { type: "Extend" } });
   };
 
   return (
@@ -42,7 +50,7 @@ function LockSwapTabs() {
         </button>
       </div>
       <div className="mt-3 p-2 w-full ">
-        {active && <LockSwapModal type={active} />}
+        {type && <LockSwapModal type={state.type} />}
       </div>
     </div>
   );

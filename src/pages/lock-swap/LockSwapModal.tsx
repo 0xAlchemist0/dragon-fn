@@ -1,53 +1,45 @@
-import React, { useEffect, useState } from "react";
-import imgUrl from "../../assets/dragon.png";
-import lockswapContent from "../../../config/LockSwapContent";
-import { useUserStats } from "../../hooks/useUserStats";
-import LPPairsModal from "./LPPairsModal";
-import { useTokenLock } from "../../hooks/useTokenLock";
-import LockSlider from "./LockSlider";
-import TxToaster from "./TxToaster";
+import { useContext, useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { dragonPools } from "../../../config/dragonPools";
-import {
-  IoIosInformationCircleOutline,
-  IoMdInformationCircleOutline,
-} from "react-icons/io";
-import { Tooltip } from "@mui/material";
-import { contracts } from "../../../contract_interactions/contracts/contracts";
 import { HiOutlineExternalLink } from "react-icons/hi";
-import { FaRegCalendar } from "react-icons/fa";
+import { dragonPools } from "../../../config/dragonPools";
+import lockswapContent from "../../../config/LockSwapContent";
+import { contracts } from "../../../contract_interactions/contracts/contracts";
+import { LockContext } from "../../context-providers/LockProvider";
 import CalenderModal from "./CalenderModal";
+import LPPairsModal from "./LPPairsModal";
+import TxToaster from "./TxToaster";
 //{ title, description, logo, token_name }
 function LockSwapModal({ type }: any) {
-  const {
-    lockTime,
-    setLockTime,
-    tokenAmount,
-    setTokenAmount,
-    votingPower,
-    isReady,
-    setReady,
-    approve,
-    setApprove,
-    wasApproved,
-    txComplete,
-    setTxComplete,
-    poolSelected,
-    setPoolSelected,
-    handleTXEvent,
-    txMessage,
-    load,
-    setLoad,
-  }: any = useTokenLock(type);
-  const { title, description, btn } = lockswapContent[type];
-  const { lp_balance }: any = useUserStats();
+  const { state, dispatch, userStats }: any = useContext(LockContext);
+  // const {
+  //   lockTime,
+  //   setLockTime,
+  //   tokenAmount,
+  //   setTokenAmount,
+  //   votingPower,
+  //   isReady,
+  //   setReady,
+  //   approve,
+  //   setApprove,
+  //   wasApproved,
+  //   txComplete,
+  //   setTxComplete,
+  //   poolSelected,
+  //   setPoolSelected,
+  //   handleTXEvent,
+  //   txMessage,
+  //   load,
+  //   setLoad,
+  // }: any = useTokenLock(type);
+  const { btn } = lockswapContent[type];
   const [open, setOpen] = useState(false);
   const { logo1, logo2, name } = dragonPools[0];
   useEffect(() => {
     handleClose();
-  }, [poolSelected]);
+  }, [state.poolSelected]);
 
-  const handleModalOpen = () => setPoolSelected(null);
+  const handleModalOpen = () => {};
+  // dispatch({ type: "set", payload: { poolSelected: null } });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -62,7 +54,7 @@ function LockSwapModal({ type }: any) {
           <div className="mt-2 p-3">
             <span className="text-xs flex justify-between mb-2 p-1">
               <h1>Amount</h1>
-              <h1>Balance: {lp_balance}</h1>
+              <h1>Balance: {userStats.lp_balance}</h1>
             </span>
             <span className="grid grid-cols-2 border border-[#2A2B30] rounded-xl">
               <button
@@ -87,7 +79,7 @@ function LockSwapModal({ type }: any) {
                   </div>
                 </div>
                 <h3 className="mt-2 text-sm font-bold">
-                  {poolSelected ? poolSelected : "Dragon"}
+                  {state.poolSelected ? state.poolSelected.name : "DRAGON"}
                 </h3>
               </button>
               <span className="border border-[#28292e] p-1.5 grid grid-flow-row text-xs">
@@ -96,7 +88,10 @@ function LockSwapModal({ type }: any) {
                   placeholder="0"
                   className=" h-full outline-0"
                   onChange={(e) => {
-                    setTokenAmount(e.target.value);
+                    dispatch({
+                      type: "set",
+                      payload: { tokenAmount: e.target.value },
+                    });
                   }}
                 />
                 <h3>$0</h3>
@@ -114,6 +109,8 @@ function LockSwapModal({ type }: any) {
             </span>
           </div>
         )}
+
+        {/* We gotta put this in a component and map t out to much reuse code area of interest ends where blank comment pops up */}
         {type == "Lock" || type == "Extend" ? (
           <div className="p-5">
             <h3>Lock Time</h3>
@@ -122,7 +119,7 @@ function LockSwapModal({ type }: any) {
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
                   console.log("7");
-                  setLockTime(7);
+                  dispatch({ type: "set", payload: { lockTime: 7 } });
                 }}
               >
                 1W
@@ -131,7 +128,7 @@ function LockSwapModal({ type }: any) {
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
                   console.log("7");
-                  setLockTime(14);
+                  dispatch({ type: "set", payload: { lockTime: 14 } });
                 }}
               >
                 2W
@@ -140,7 +137,7 @@ function LockSwapModal({ type }: any) {
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
                   console.log("7");
-                  setLockTime(21);
+                  dispatch({ type: "set", payload: { lockTime: 7 } });
                 }}
               >
                 3W
@@ -149,7 +146,7 @@ function LockSwapModal({ type }: any) {
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
                   console.log("30");
-                  setLockTime(30);
+                  dispatch({ type: "set", payload: { lockTime: 21 } });
                 }}
               >
                 1M
@@ -158,7 +155,7 @@ function LockSwapModal({ type }: any) {
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
                   console.log("90");
-                  setLockTime(90);
+                  dispatch({ type: "set", payload: { lockTime: 28 } });
                 }}
               >
                 3M
@@ -167,51 +164,46 @@ function LockSwapModal({ type }: any) {
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
                   console.log("365");
-                  setLockTime(365);
+                  dispatch({ type: "set", payload: { lockTime: 365 } });
                 }}
               >
                 1Y
               </button>
               <CalenderModal />
             </div>
+            {/*  */}
             <div className="p-2 grid grid-flow-row  gap-2 mt-2">
               <div className=" flex justify-between text-xs">
                 <h3>Tokens locked:</h3>
-                <h3>{tokenAmount}</h3>
+                <h3>{state.tokenAmount}</h3>
               </div>
               <div className=" flex justify-between text-xs ">
                 <h3>Voting power:</h3>
-                <h3>{votingPower || "-"}</h3>
+                <h3>{state.votingPower || "-"}</h3>
               </div>
             </div>
           </div>
         ) : null}
 
-        <TxToaster
-          txReady={txComplete}
-          setTxReady={setTxComplete}
-          txMessage={txMessage}
-          load={load}
-          setLoad={setLoad}
-        />
+        <TxToaster />
         <span>
           <LPPairsModal
             open={open}
             setOpen={setOpen}
             handleOpen={handleOpen}
             handleClose={handleClose}
-            setPoolSelected={setPoolSelected}
           />
         </span>
         <div className="p-3  flex justify-center text-center gap-2 text-white">
           <button
             className="border cursor-pointer w-full p-3 rounded-md bg-[#E65C00] border-[#383941] font-extrabold mt-2 hover:bg-[#FF6B00]/90"
             onClick={() => {
-              handleTXEvent();
+              dispatch({ type: "set", payload: { isReady: true } });
+              console.log(state);
             }}
           >
             <span className="text-[16px] font-semibold">
-              {load ? (
+              {state.load ? (
                 <>
                   <AiOutlineLoading3Quarters className="m-auto animate-spin" />
                 </>

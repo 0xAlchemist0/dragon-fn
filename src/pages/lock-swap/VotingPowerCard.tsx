@@ -1,10 +1,10 @@
-import React from "react";
-import { Card, CardContent } from "@mui/material";
-import { FaBoltLightning } from "react-icons/fa6";
-import { useUserStats } from "../../hooks/useUserStats";
+import { Card } from "@mui/material";
 import Divider from "@mui/material/Divider";
+import { useContext } from "react";
+import { FaBoltLightning } from "react-icons/fa6";
+import { LockContext } from "../../context-providers/LockProvider";
 function VotingPowerCard() {
-  const userStats: any = useUserStats();
+  const { userStats }: any = useContext(LockContext);
   return (
     <Card
       variant="outlined"

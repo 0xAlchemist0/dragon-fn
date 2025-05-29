@@ -1,12 +1,12 @@
 import { useWallets } from "@privy-io/react-auth";
 import { useEffect, useState } from "react";
+import { formatUnits } from "viem";
 import {
   getPoolBalance,
   getVotingPower,
   locked,
 } from "../../contract_interactions/contract-reads";
 import { contracts } from "../../contract_interactions/contracts/contracts";
-import { formatUnits } from "viem";
 
 export function useUserStats() {
   const { wallets } = useWallets();
@@ -14,6 +14,7 @@ export function useUserStats() {
 
   useEffect(() => {
     async function getStats(address: string) {
+      console.log(`Adress: ${address}`);
       const user_stats: object = await stats(address);
       setStats(user_stats);
       return user_stats;
@@ -22,6 +23,11 @@ export function useUserStats() {
       getStats(wallets[0].address);
     }
   }, [wallets]);
+
+  useEffect(() => {
+    console.log(`Stats updated:`, userStats);
+  }, [userStats]);
+
   return userStats;
 }
 

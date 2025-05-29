@@ -11,18 +11,27 @@ const initialState = getInitialState();
 export function useSandBox() {
   const { provider, account }: any = useWalletInfo();
   //dispatch updates lockstae is the state
-  //has to always be state and reducer
+  //has to always b e state and reducer
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {}, [state.poolSelected]);
 
   useEffect(() => {
     const { lockTime, tokenAmount } = state;
-    if (lockTime > 0) {
+    if (lockTime > 0 && tokenAmount > 0) {
+      console.log(`Lock Time: ${lockTime} \n Amount: ${tokenAmount}`);
+      votingPowerHandler();
+    } else if (lockTime > 0) {
       lockTimeHandler();
     }
-    if (tokenAmount > 0) {
-      votingPowerHandler();
-    }
-  }, [state.lockTime, state.tokenAmount]);
+  }, [state.lockTime]);
+
+  // useEffect(() => {
+  //   const { tokenAmount, lockTime } = state;
+  //   if (tokenAmount > 0 && lockTime > 0) {
+  //     votingPowerHandler();
+  //   }
+  // }, [state.tokenAmount]);
 
   useEffect(() => {
     const { isReady } = state;
@@ -30,6 +39,9 @@ export function useSandBox() {
       handleTxEvent();
     }
   }, [state.isReady]);
+
+  //this handles the state change we pass in the type of action and we pass in the value we want to update for example:
+  //dispatch({ type: "set", payload: { type: "Extend" } });
 
   function reducer(state: any, action: any) {
     const { type, payload } = action;
@@ -52,6 +64,7 @@ export function useSandBox() {
   async function votingPowerHandler() {
     const { tokenAmount, lockTime } = state;
     const votingPower = await calculateVotingPower(tokenAmount, lockTime);
+    console.log(`Voting Power: ${votingPower}`);
     dispatch({ type: "set", payload: { votingPower } });
     return null;
   }
@@ -77,6 +90,7 @@ export function useSandBox() {
 
   async function lockLp() {
     const { tokenAmount, lockTime }: any = state;
+    console.log(`INFO!:\nAMOUNT: ${tokenAmount}\nLOCK TIME:${lockTime}`);
     console.assert(lockTime, {
       value: lockTime,
       message: "Value error",
@@ -116,13 +130,14 @@ export function useSandBox() {
       payload: { txMessage: txResult, load: false, txComplete: true },
     });
   }
+
   return { state, dispatch };
 }
 // only  pass in action when you call dispatcher
 
 function getInitialState() {
   return {
-    lockTime: 1778116339,
+    lockTime: null,
     tokenAmount: 3000,
     votingPower: 0,
     isReady: false,
@@ -133,8 +148,20 @@ function getInitialState() {
     handleTXEvent: 0,
     txMessage: null,
     load: false,
-    type: "Extend",
+    type: "Lock",
   };
 }
+
+// lockTime,
+// tokenAmount,
+// votingPower,
+// isReady,
+// approve,
+// wasApproved,
+// txComplete,
+// poolSelected,
+// handleTXEvent,
+// txMessage,
+// load,
 
 //stat, useMemo, useContext

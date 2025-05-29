@@ -1,17 +1,10 @@
-import { Box, Button, colors, Divider, Modal, Typography } from "@mui/material";
-import React, { ReactNode, useState } from "react";
-import { CiSearch } from "react-icons/ci";
-import { FaSearch } from "react-icons/fa";
+import { Box, Modal } from "@mui/material";
+import { useContext } from "react";
 import { dragonPools } from "../../../config/dragonPools";
+import { LockContext } from "../../context-providers/LockProvider";
 import PoolPairItem from "./PoolPairItem";
-import { assert } from "console";
-function LPPairsModal({
-  open,
-  setOpen,
-  handleOpen,
-  handleClose,
-  setPoolSelected,
-}: any) {
+function LPPairsModal({ open, setOpen, handleOpen, handleClose }: any) {
+  const { state, dispatch }: any = useContext(LockContext);
   const style = {
     position: "absolute",
     top: "50%",
@@ -60,7 +53,7 @@ function LPPairsModal({
           </span>
           <span className="">
             <span className="grid grid-flow-row mt-5 h-100 overflow-y-auto gap-1.5">
-              {getPools(setPoolSelected)}
+              {getPools(handleClose)}
             </span>
           </span>
         </Box>
@@ -69,9 +62,13 @@ function LPPairsModal({
   );
 }
 
-function getPools({ setPoolSelected }: any) {
+function getPools(handleClose: Function) {
   const pools = dragonPools.map((pool, key) => {
-    return <PoolPairItem pool={pool} setPoolSelected={setPoolSelected} />;
+    return (
+      <div key={key}>
+        <PoolPairItem pool={pool} handleClose={handleClose} />
+      </div>
+    );
   });
   return pools;
 }

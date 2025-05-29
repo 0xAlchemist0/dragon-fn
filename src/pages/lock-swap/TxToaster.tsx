@@ -1,13 +1,13 @@
 import { Snackbar } from "@mui/material";
-import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import { SnackbarCloseReason } from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
+import React, { useContext } from "react";
 import { IoClose } from "react-icons/io5";
+import { LockContext } from "../../context-providers/LockProvider";
 
-function TxToaster({ txReady, setTxReady, txMessage }: any) {
+function TxToaster() {
+  const { state, dispatch }: any = useContext(LockContext);
   const handleClose = () => {
-    setTxReady(false);
+    dispatch({ type: "set", txComplete: false });
   };
   const action = (
     <React.Fragment>
@@ -24,12 +24,12 @@ function TxToaster({ txReady, setTxReady, txMessage }: any) {
 
   return (
     <>
-      {txMessage && (
+      {state.txMessage && (
         <Snackbar
-          open={txReady}
+          open={state.txReady}
           autoHideDuration={6000}
           onClose={handleClose}
-          message={txMessage.message}
+          message={state.txMessage.message}
           action={action}
           sx={{
             fontSize: "10px",
