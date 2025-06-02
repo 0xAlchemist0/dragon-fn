@@ -1,7 +1,12 @@
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaWallet } from "react-icons/fa";
 import { LuWaves } from "react-icons/lu";
+import { PiHandWithdrawFill } from "react-icons/pi";
+import { withdrawLock } from "../../contract_interactions/contract-writes";
+import useWalletInfo from "../hooks/useWalletInfo";
 function TabDetector({ type, balances }: any) {
+  const { provider, account }: any = useWalletInfo();
+
   function DetectElement({ type, balances }: any) {
     switch (type) {
       case "tokens":
@@ -56,6 +61,11 @@ function TabDetector({ type, balances }: any) {
     );
   }
   function Locks({ balances }: any) {
+    const handleWithdraw = async () => {
+      console.log("Withdrawing");
+      const result = await withdrawLock(provider, account);
+      return null;
+    };
     return (
       <>
         {balances.lockInfo ? (
@@ -83,8 +93,16 @@ function TabDetector({ type, balances }: any) {
                   />
                 </div>
               </div>
-              <div className="text-white grid grid-flow-row">
-                <h3>{balances.lockInfo[0]}</h3>
+              <div className="text-white grid grid-flow-row  w-100">
+                <span className="flex gap-3">
+                  <h3>{balances.lockInfo[0]}</h3>
+                  <button
+                    className="text-gray-600 hover:text-orange-500 mb-1"
+                    onClick={handleWithdraw}
+                  >
+                    <PiHandWithdrawFill />
+                  </button>
+                </span>
                 <h3 className="text-white/80 text-xs">
                   Locked until {balances.lockInfo[1]}
                 </h3>

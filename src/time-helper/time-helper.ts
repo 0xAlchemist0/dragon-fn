@@ -1,8 +1,9 @@
 export function numericToUnix(days_added: any) {
+  console.log(`days added: ${days_added}`);
   console.log(typeof days_added, days_added);
   const current_date: any = new Date();
   const result = addDays(current_date, days_added);
-  console.log(result);
+  console.log(`unix result: ${result}`);
   return result;
 }
 
@@ -17,4 +18,13 @@ export function unixToNumeric(timestamp: any) {
   const date = new Date(Number(unix) * 1000);
   console.log(date.toLocaleString());
   return date.toLocaleString();
+}
+function addIt(date: Date, days: number): number {
+  const newDate = new Date(date);
+  newDate.setDate(newDate.getDate() + days);
+  return Math.floor(newDate.getTime() / 1000);
+}
+
+export function convert(days: number) {
+  return addIt(new Date(), days); // already a Unix timestamp
 }

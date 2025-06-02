@@ -44,6 +44,11 @@ function LockSwapModal({ type }: any) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const handleTxInitiation = () => {
+    dispatch({ type: "set", payload: { load: true } });
+    dispatch({ type: "set", payload: { isReady: true } });
+  };
+
   return (
     <div className="flex justify-center">
       <div className="text-white sm:w-[95%] md:w-[100%] p-5 border border-[#2A2B30] bg-[#1E1F23] rounded-md">
@@ -118,7 +123,6 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  console.log("7");
                   dispatch({ type: "set", payload: { lockTime: 7 } });
                 }}
               >
@@ -127,7 +131,6 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  console.log("7");
                   dispatch({ type: "set", payload: { lockTime: 14 } });
                 }}
               >
@@ -136,7 +139,6 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  console.log("7");
                   dispatch({ type: "set", payload: { lockTime: 7 } });
                 }}
               >
@@ -145,7 +147,6 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  console.log("30");
                   dispatch({ type: "set", payload: { lockTime: 21 } });
                 }}
               >
@@ -154,7 +155,6 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  console.log("90");
                   dispatch({ type: "set", payload: { lockTime: 28 } });
                 }}
               >
@@ -163,7 +163,6 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  console.log("365");
                   dispatch({ type: "set", payload: { lockTime: 365 } });
                 }}
               >
@@ -197,10 +196,7 @@ function LockSwapModal({ type }: any) {
         <div className="p-3  flex justify-center text-center gap-2 text-white">
           <button
             className="border cursor-pointer w-full p-3 rounded-md bg-[#E65C00] border-[#383941] font-extrabold mt-2 hover:bg-[#FF6B00]/90"
-            onClick={() => {
-              dispatch({ type: "set", payload: { isReady: true } });
-              console.log(state);
-            }}
+            onClick={handleTxInitiation}
           >
             <span className="text-[16px] font-semibold">
               {state.load ? (

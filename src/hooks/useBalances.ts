@@ -62,6 +62,7 @@ function useBalances() {
         votes: info,
         lockInfo,
         pools: null,
+        reload: false,
       });
     } catch (error) {}
   }

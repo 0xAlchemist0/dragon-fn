@@ -7,7 +7,7 @@ import { LockContext } from "../../context-providers/LockProvider";
 function TxToaster() {
   const { state, dispatch }: any = useContext(LockContext);
   const handleClose = () => {
-    dispatch({ type: "set", txComplete: false });
+    dispatch({ type: "set", payload: { txComplete: false } });
   };
   const action = (
     <React.Fragment>
@@ -24,9 +24,9 @@ function TxToaster() {
 
   return (
     <>
-      {state.txMessage && (
+      {state.txComplete && (
         <Snackbar
-          open={state.txReady}
+          open={state.txComplete}
           autoHideDuration={6000}
           onClose={handleClose}
           message={state.txMessage.message}

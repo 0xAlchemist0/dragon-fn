@@ -5,7 +5,7 @@ import {
   extendLockTime,
   increaseLockAmount,
 } from "../../contract_interactions/contract-writes";
-import { numericToUnix } from "../time-helper/time-helper";
+import { convert, numericToUnix } from "../time-helper/time-helper";
 import useWalletInfo from "./useWalletInfo";
 const initialState = getInitialState();
 export function useSandBox() {
@@ -20,11 +20,14 @@ export function useSandBox() {
     const { lockTime, tokenAmount } = state;
     if (lockTime > 0 && tokenAmount > 0) {
       lockTimeHandler();
-      console.log(`Lock Time: ${lockTime} \n Amount: ${tokenAmount}`);
       votingPowerHandler();
     } else if (lockTime > 0) {
       lockTimeHandler();
     }
+  }, [state.lockTime]);
+
+  useEffect(() => {
+    console.log(state.lockTime);
   }, [state.lockTime]);
 
   // useEffect(() => {
@@ -36,12 +39,12 @@ export function useSandBox() {
 
   useEffect(() => {
     const { isReady } = state;
-    console.log(isReady);
     if (isReady && provider && account) {
-      console.log("READY!");
       handleTxEvent();
     }
   }, [state.isReady]);
+
+  useEffect(() => {}, [state]);
 
   //this handles the state change we pass in the type of action and we pass in the value we want to update for example:
   //dispatch({ type: "set", payload: { type: "Extend" } });
@@ -60,15 +63,13 @@ export function useSandBox() {
   //handles the lock times when changed
   function lockTimeHandler() {
     const { lockTime } = state;
-    300044;
-    const formattedTime = numericToUnix(lockTime);
-    dispatch({ type: "set", payload: { lockTime: formattedTime } });
+    const time = numericToUnix(lockTime);
+    dispatch({ type: "set", payload: { lockTime: time } });
   }
 
   async function votingPowerHandler() {
     const { tokenAmount, lockTime } = state;
     const votingPower = await calculateVotingPower(tokenAmount, lockTime);
-    console.log(`Voting Power: ${votingPower}`);
     dispatch({ type: "set", payload: { votingPower } });
     return null;
   }
@@ -94,23 +95,18 @@ export function useSandBox() {
 
   async function lockLp() {
     const { tokenAmount, lockTime }: any = state;
-    console.log(`INFO!:\nAMOUNT: ${tokenAmount}\nLOCK TIME:${lockTime}`);
+    const time = convert(lockTime);
     console.assert(lockTime, {
       value: lockTime,
       message: "Value error",
     });
     txTrigger();
-
-    const txResult = await createVeLock(
-      tokenAmount,
-      lockTime,
-      provider,
-      account
-    );
+    const txResult = await createVeLock(tokenAmount, time, provider, account);
     dispatch({
       type: "set",
-      payload: { txMessage: txResult, txComplete: true, load: false },
+      payload: { txMessage: txResult, load: false, txComplete: true },
     });
+    suspendTxOperation();
   }
 
   async function increaseLock() {
@@ -134,6 +130,15 @@ export function useSandBox() {
       payload: { txMessage: txResult, load: false, txComplete: true },
     });
   }
+  function suspendTxOperation() {
+    dispatch({
+      type: "set",
+      payload: {
+        isReady: false,
+        load: false,
+      },
+    });
+  }
 
   return { state, dispatch };
 }
@@ -141,7 +146,7 @@ export function useSandBox() {
 
 function getInitialState() {
   return {
-    lockTime: null,
+    lockTime: 0,
     tokenAmount: 3000,
     votingPower: 0,
     isReady: false,

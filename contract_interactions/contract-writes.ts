@@ -12,6 +12,7 @@ export async function createVeLock(
   provider: any,
   account: any
 ) {
+  console.log(value, time, provider, account);
   try {
     const walletClient = await initializeWalletClient(provider, account);
     const { request }: any = await client.simulateContract({
@@ -30,6 +31,7 @@ export async function createVeLock(
     };
   } catch (error) {
     const message = error as GetBlockNumberErrorType;
+    console.log(message);
     return {
       complete: false,
       message: `⚠️ Transaction Failed: ${message.name}`,
@@ -59,6 +61,7 @@ export async function increaseLockAmount(
     };
   } catch (error) {
     const message = error as GetBlockNumberErrorType;
+    console.log(message);
     return {
       complete: false,
       message: `⚠️ Transaction Failed: ${message.name}`,
@@ -80,6 +83,32 @@ export async function extendLockTime(
       functionName: "extendLockTime",
       args: [unlock_time],
     });
+    const txHash = await walletClient.writeContract(request);
+    return {
+      complete: true,
+      message: "🎉 Transaction Successful ",
+      txHash,
+    };
+  } catch (error) {
+    const message = error as GetBlockNumberErrorType;
+    return {
+      complete: false,
+      message: `⚠️ Transaction Failed: ${message.name}`,
+    };
+  }
+}
+
+export async function withdrawLock(provider: any, account: any) {
+  try {
+    const walletClient = await initializeWalletClient(provider, account);
+    const { request }: any = await client.simulateContract({
+      account,
+      address: contracts.ve69LP,
+      abi: ve69_ABI,
+      functionName: "withdraw",
+      args: [],
+    });
+
     const txHash = await walletClient.writeContract(request);
     return {
       complete: true,
