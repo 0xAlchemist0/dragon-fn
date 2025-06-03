@@ -26,9 +26,7 @@ export default function CalenderModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selected, setSelected] = React.useState<Date>();
-  React.useEffect(() => {
-    console.log(selected);
-  }, [selected]);
+  React.useEffect(() => {}, [selected]);
   return (
     <div>
       <button

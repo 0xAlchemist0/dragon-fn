@@ -19,12 +19,11 @@ export function unixToNumeric(timestamp: any) {
   console.log(date.toLocaleString());
   return date.toLocaleString();
 }
-function addIt(date: Date, days: number): number {
-  const newDate = new Date(date);
-  newDate.setDate(newDate.getDate() + days);
-  return Math.floor(newDate.getTime() / 1000);
-}
-
-export function convert(days: number) {
-  return addIt(new Date(), days); // already a Unix timestamp
+export function convert(days_added: number) {
+  const current_date = Date.now(); // ms
+  const ms_to_add = days_added * 24 * 60 * 60 * 1000; // ms in days
+  const future = current_date + ms_to_add;
+  const result = BigInt(Math.floor(future / 1000)); // convert to seconds as BigInt
+  console.log(`convert: ${result}`);
+  return result;
 }

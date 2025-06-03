@@ -17,3 +17,6 @@ export const contracts: any = {
   ve69LPPoolVoting: "0xB8094a7B421c58fa30e8EdF2a46d6E56B00648be",
   DragonPartnerRegistry: "0x94b1381E5E66d825a3484128459375a0fFAdb3B2",
 };
+
+//my wallet address 0x934B0AB5B32d73cF99b618e6f31eB2e4E976f741
+//the lp token address i think will be multiple since there are probably different lp tokens

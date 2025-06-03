@@ -139,7 +139,7 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  dispatch({ type: "set", payload: { lockTime: 7 } });
+                  dispatch({ type: "set", payload: { lockTime: 21 } });
                 }}
               >
                 3W
@@ -147,7 +147,7 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  dispatch({ type: "set", payload: { lockTime: 21 } });
+                  dispatch({ type: "set", payload: { lockTime: 30 } });
                 }}
               >
                 1M
@@ -155,7 +155,7 @@ function LockSwapModal({ type }: any) {
               <button
                 className="border border-[#2A2B30] rounded-full"
                 onClick={() => {
-                  dispatch({ type: "set", payload: { lockTime: 28 } });
+                  dispatch({ type: "set", payload: { lockTime: 90 } });
                 }}
               >
                 3M

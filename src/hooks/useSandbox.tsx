@@ -5,7 +5,7 @@ import {
   extendLockTime,
   increaseLockAmount,
 } from "../../contract_interactions/contract-writes";
-import { convert, numericToUnix } from "../time-helper/time-helper";
+import { convert, unixToNumeric } from "../time-helper/time-helper";
 import useWalletInfo from "./useWalletInfo";
 const initialState = getInitialState();
 export function useSandBox() {
@@ -16,19 +16,17 @@ export function useSandBox() {
 
   useEffect(() => {}, [state.poolSelected]);
 
+  //the 7 day lock is wrong because transaction fails when you try it
+
   useEffect(() => {
     const { lockTime, tokenAmount } = state;
     if (lockTime > 0 && tokenAmount > 0) {
-      lockTimeHandler();
       votingPowerHandler();
     } else if (lockTime > 0) {
-      lockTimeHandler();
     }
   }, [state.lockTime]);
 
-  useEffect(() => {
-    console.log(state.lockTime);
-  }, [state.lockTime]);
+  useEffect(() => {}, [state.lockTime]);
 
   // useEffect(() => {
   //   const { tokenAmount, lockTime } = state;
@@ -61,15 +59,14 @@ export function useSandBox() {
   }
 
   //handles the lock times when changed
-  function lockTimeHandler() {
-    const { lockTime } = state;
-    const time = numericToUnix(lockTime);
-    dispatch({ type: "set", payload: { lockTime: time } });
-  }
 
+  //state is semi delayed find a way to fix
   async function votingPowerHandler() {
     const { tokenAmount, lockTime } = state;
-    const votingPower = await calculateVotingPower(tokenAmount, lockTime);
+    const time = await convert(lockTime);
+    const dateFormat = await unixToNumeric(time);
+    console.log(`Date locked: ${dateFormat}`);
+    const votingPower = await calculateVotingPower(tokenAmount, time);
     dispatch({ type: "set", payload: { votingPower } });
     return null;
   }
@@ -95,13 +92,13 @@ export function useSandBox() {
 
   async function lockLp() {
     const { tokenAmount, lockTime }: any = state;
-    const time = convert(lockTime);
+    const unix: any = convert(lockTime);
     console.assert(lockTime, {
       value: lockTime,
       message: "Value error",
     });
     txTrigger();
-    const txResult = await createVeLock(tokenAmount, time, provider, account);
+    const txResult = await createVeLock(tokenAmount, unix, provider, account);
     dispatch({
       type: "set",
       payload: { txMessage: txResult, load: false, txComplete: true },
@@ -158,6 +155,7 @@ function getInitialState() {
     txMessage: null,
     load: false,
     type: "Lock",
+    unixLockTime: null,
   };
 }
 

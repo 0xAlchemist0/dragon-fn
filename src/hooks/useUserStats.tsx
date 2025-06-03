@@ -14,7 +14,6 @@ export function useUserStats() {
 
   useEffect(() => {
     async function getStats(address: string) {
-      console.log(`Adress: ${address}`);
       const user_stats: object = await stats(address);
       setStats(user_stats);
       return user_stats;
@@ -24,9 +23,7 @@ export function useUserStats() {
     }
   }, [wallets]);
 
-  useEffect(() => {
-    console.log(`Stats updated:`, userStats);
-  }, [userStats]);
+  useEffect(() => {}, [userStats]);
 
   return userStats;
 }

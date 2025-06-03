@@ -84,7 +84,7 @@ export async function getPoolBalance(
 //the balanceOf read function also give us the voting power
 //unlock time must be in unix format
 // Math.floor(Date.now() / 1000) timestamp format
-export async function calculateVotingPower(amount: number, unlockTime: Number) {
+export async function calculateVotingPower(amount: number, unlockTime: BigInt) {
   console.log(amount, unlockTime);
   try {
     const voting_power: any = await client.readContract({
