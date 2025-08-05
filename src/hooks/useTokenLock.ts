@@ -134,6 +134,7 @@ export function useTokenLock(type: string) {
     const { provider, account }: any = await getProvider();
     const unlock_time = numericToUnix(lockTime);
     setLoad(true);
+    console.log("extending");
     const extendResult: any = await extendLockTime(
       unlock_time,
       provider,
@@ -146,7 +147,7 @@ export function useTokenLock(type: string) {
   }
 
   async function getVotingPower() {
-    const unix_time = numericToUnix(lockTime);
+    const unix_time: any = numericToUnix(lockTime);
     const power = await calculateVotingPower(tokenAmount, unix_time);
     setVotingPower(power);
   }
