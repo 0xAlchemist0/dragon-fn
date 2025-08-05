@@ -1,9 +1,14 @@
 import HomeHero from "./HomeHero";
+import HomeMidSection from "./HomeMidSection";
 
 function Home() {
   return (
-    <div className="mt-10 container" style={{ animation: "var(--fadein)" }}>
+    <div
+      className="mt-3 m-auto container  "
+      style={{ animation: "var(--fadein)" }}
+    >
       <HomeHero />
+      <HomeMidSection />
     </div>
   );
 }
