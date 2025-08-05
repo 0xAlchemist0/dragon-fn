@@ -1,3 +1,4 @@
+import HomeBottom from "./HomeBottom";
 import HomeHero from "./HomeHero";
 import HomeMidSection from "./HomeMidSection";
 
@@ -9,6 +10,7 @@ function Home() {
     >
       <HomeHero />
       <HomeMidSection />
+      <HomeBottom />
     </div>
   );
 }
